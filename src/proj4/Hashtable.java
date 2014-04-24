@@ -6,7 +6,7 @@ package proj4;
  */
 public class Hashtable<K, V>
 {
-    static final int DEFAULT_SIZE = 197;
+    static final int DEFAULT_SIZE = 101;
     private int entries;
     private int collisions;
     private Node<K, V>[] table;
