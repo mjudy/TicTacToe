@@ -12,12 +12,12 @@ public class TicTacToe
     private char[][] board;
     private char player1;
     private char player2;
-    private boolean turn;
+    private int turn;
 
     public TicTacToe()
     {
         board = new char[ROWS][COLUMNS];
-        turn = true;
+        turn = 1;
     }
 
     public void setPlayerMark(char mark, int player)
@@ -44,20 +44,21 @@ public class TicTacToe
 
     public boolean move(int row, int column)
     {
-        if(playerAt(row, column) != 0)
+        if(board[row][column] == 0)
         {
-            if(turn)
+            if(turn == 1)
             {
                 board[row][column] = player1;
-                turn = false;
-                return checkWin(player1);
+                turn = 2;
+                //return checkWin(player1);
             }
-            else
+            else if (turn == 2)
             {
                 board[row][column] = player2;
-                turn = true;
-                return checkWin(player2);
+                turn = 1;
+                //return checkWin(player2);
             }
+            return true;
         }
         else
             return false;
@@ -95,7 +96,7 @@ public class TicTacToe
             return false;
     }
 
-    public boolean getTurn()
+    public int getTurn()
     {
         return turn;
     }
@@ -104,7 +105,7 @@ public class TicTacToe
     {
         System.out.println("-------");
         System.out.print(toString());
-        System.out.println("-------");
+        //System.out.println("-------");
     }
 
     public String toString()

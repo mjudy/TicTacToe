@@ -8,28 +8,37 @@ import java.util.Random;
  */
 public class RandomAI
 {
-    char marker;
-    int player;
+    private char marker;
+    private int player;
+    private Random rand;
 
     public RandomAI()
     {
         marker = 'z';
         player = 0;
+        rand = new Random(new Random().nextLong());
     }
 
     public RandomAI(char mark, int player)
     {
         marker = mark;
         this.player = player;
+        rand = new Random(new Random().nextLong());
     }
 
     public void move(TicTacToe t)
     {
-        Random r = new Random(player);
-        int row = r.nextInt(3);
-        int column = r.nextInt(3);
+        int row = rand.nextInt(3);
+        int column = rand.nextInt(3);
 
         t.setPlayerMark(marker, player);
-        t.move(row, column);
+        if(t.move(row, column))
+        {
+            //return;
+        }
+        else
+        {
+            move(t);
+        }
     }
 }

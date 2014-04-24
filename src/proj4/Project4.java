@@ -20,9 +20,9 @@ public class Project4
 
         for(int i=0; i < 9; i++)
         {
-            if(game.getTurn())
+            if(game.getTurn() == 1)
                 p1.move(game);
-            else
+            else if (game.getTurn() == 2)
                 p2.move(game);
 
             game.printBoard();
