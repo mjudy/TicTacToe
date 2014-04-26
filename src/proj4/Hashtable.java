@@ -25,17 +25,25 @@ public class Hashtable<K, V>
 
     public boolean containsKey(K key)
     {
+
+        for(int i = 0; i < table.length; i++)
+        {
+            if(table[i] == key)
+            {
+                return true;
+            }
+        }
         return false;
     }
 
     public V get(K key)
     {
-        return table[trueHash(key)].data;
-    }
-
-    public int getPositionInHashtable(K key)
-    {
-        return findPosition(key);
+        if(table[getPositionInHashtable(key)] != null)
+        {
+            return table[getPositionInHashtable(key)].data;
+        }
+        else
+            return null;
     }
 
     public int numCollisions()
@@ -55,15 +63,25 @@ public class Hashtable<K, V>
 
     public void put(K key, V data)
     {
-        int position = findPosition(key);
-        table[position] = new Node<K, V> (key, data);
-        entries++;
+        int position = getPositionInHashtable(key);
+        if(containsKey(key))
+        {
+            table[position].data = data;
+        }
+        else
+        {
+            table[position] = new Node<K, V> (key, data);
+            entries++;
+        }
     }
 
     private int trueHash(K key)
     {
         int hash = key.hashCode();
         hash %= table.length;
+
+//        System.out.println(hash);
+
         if (hash < 0)
         {
             hash += table.length;
@@ -71,12 +89,12 @@ public class Hashtable<K, V>
         return hash;
     }
     
-    private int findPosition(K key)
+    private int getPositionInHashtable(K key)
     {
         int offset = 1;
         int position = trueHash(key);
 
-        while (table[position] != null && !table[position].data.equals(key))
+        while (table[position] != null && table[position].data.equals(key))
         {
             position += offset;
             offset += 2;

@@ -26,6 +26,12 @@ public class Project4
                 p2.move(game);
 
             game.printBoard();
+            System.out.println("Board Hash: " + game.hashCode());
+            if(game.getWinner() != -1 && i > 3)
+            {
+                System.out.println("Player " + game.getWinner() + " Wins!");
+                break;
+            }
         }
     }
 }

@@ -32,13 +32,15 @@ public class RandomAI
         int column = rand.nextInt(3);
 
         t.setPlayerMark(marker, player);
-        if(t.move(row, column))
+        while(t.getTurn() == player)
         {
-            //return;
-        }
-        else
-        {
-            move(t);
+            if(t.move(row, column))
+            {
+            }
+            else
+            {
+                move(t);
+            }
         }
     }
 }

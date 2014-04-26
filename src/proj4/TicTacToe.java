@@ -34,12 +34,33 @@ public class TicTacToe
 
     public int getWinner()
     {
-        return -1;
+        if(checkWin(player1))
+        {
+            return 1;
+        }
+        else if(checkWin(player2))
+        {
+            return 2;
+        }
+        else
+            return -1;
     }
 
-    public int hashcode()
+    public int hashCode()
     {
-        return -1;
+        int hash = 0;
+        for(char[] ary : board)
+        {
+            for(char c : ary)
+            {
+                if(c != 0)
+                {
+                    hash += c;
+                }
+            }
+        }
+        hash = (int)((hash*hash) * 1.618);
+        return hash;
     }
 
     public boolean move(int row, int column)
@@ -50,13 +71,11 @@ public class TicTacToe
             {
                 board[row][column] = player1;
                 turn = 2;
-                //return checkWin(player1);
             }
             else if (turn == 2)
             {
                 board[row][column] = player2;
                 turn = 1;
-                //return checkWin(player2);
             }
             return true;
         }
@@ -105,7 +124,6 @@ public class TicTacToe
     {
         System.out.println("-------");
         System.out.print(toString());
-        //System.out.println("-------");
     }
 
     public String toString()
