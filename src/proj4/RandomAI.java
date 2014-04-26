@@ -21,9 +21,9 @@ public class RandomAI
 
     public RandomAI(char mark, int player)
     {
-        marker = mark;
         this.player = player;
         rand = new Random(new Random().nextLong());
+        marker = mark;
     }
 
     public void move(TicTacToe t)

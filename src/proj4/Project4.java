@@ -11,27 +11,45 @@ public class Project4
 
     }
 
-    public void play()
+    public static void main(String[] args)
     {
-        RandomAI p1 = new RandomAI('o', 1);
-        RandomAI p2 = new RandomAI('x', 2);
+        Project4 test = new Project4();
 
-        TicTacToe game = new TicTacToe();
+        RandomAI p1 = new RandomAI('O', 1);
+        SmartPlayer p2 = new SmartPlayer('X', 2);
 
-        for(int i=0; i < 9; i++)
+        test.play(p1, p2, 10);
+    }
+
+    public static void play(RandomAI p1, SmartPlayer p2, int numGames)
+    {
+        for(int i = 0; i < numGames; i++)
         {
-            if(game.getTurn() == 1)
-                p1.move(game);
-            else if (game.getTurn() == 2)
-                p2.move(game);
+            System.out.println("New Game!");
+            TicTacToe game = new TicTacToe();
+            p2.newGame(2);
 
-            game.printBoard();
-            System.out.println("Board Hash: " + game.hashCode());
-            if(game.getWinner() != -1 && i > 3)
+            for(int j=0; j < 9; j++)
             {
-                System.out.println("Player " + game.getWinner() + " Wins!");
-                break;
+                if(game.getTurn() == 1)
+                    p1.move(game);
+                else if (game.getTurn() == 2)
+                    p2.move(game);
+
+                if(game.getWinner() != -1 && j > 3)
+                {
+//                    game.printBoard();
+                    System.out.println("Player " + game.getWinner() + " Wins!");
+                    p2.endGame(game);
+                    System.out.println("-------");
+                    break;
+                }
+                else
+                {
+//                    game.printBoard();
+                }
             }
         }
+        //p2.toString();
     }
 }

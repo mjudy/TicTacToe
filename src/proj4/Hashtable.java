@@ -80,8 +80,6 @@ public class Hashtable<K, V>
         int hash = key.hashCode();
         hash %= table.length;
 
-//        System.out.println(hash);
-
         if (hash < 0)
         {
             hash += table.length;
@@ -108,6 +106,21 @@ public class Hashtable<K, V>
         return position;
     }
 
+    public String toString()
+    {
+        int count = 0;
+        String str = "";
+        for(Node i : table)
+        {
+            if(i.key != null)
+            {
+                str += "[" + count + "] " + i.key.toString() + "\n";
+            }
+            count++;
+        }
+        return str;
+    }
+
     private class Node<K, V>
     {
         private K key;
@@ -117,6 +130,11 @@ public class Hashtable<K, V>
         {
             key = k;
             data = v;
+        }
+
+        public String toString()
+        {
+            return key.toString();
         }
     }
 }
