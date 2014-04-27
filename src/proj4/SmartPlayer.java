@@ -81,8 +81,33 @@ public class SmartPlayer
 
     public TicTacToe[] getSuccessors(TicTacToe t)
     {
+        TicTacToe guess = new TicTacToe(t.toString());
+        TicTacToe[] boards = new TicTacToe[9];
+        int count = 0;
+        while (count < guess.emptyCount())
+        {
+            if(successorTest(rand.nextInt(3), rand.nextInt(3), guess))
+            {
+                boards[count] = guess;
+                count++;
+            }
+            else
+                break;
+        }
+        return boards;
+    }
 
-        return new TicTacToe[1];
+    private boolean successorTest(int row, int column, TicTacToe t)
+    {
+        if(t.move(row, column))
+        {
+            return true;
+        }
+        else
+        {
+            successorTest(row, column, t);
+        }
+        return false;
     }
 
     public void move(TicTacToe t)
@@ -96,21 +121,23 @@ public class SmartPlayer
             if(table.containsKey(t.hashCode()))
             {
                 HashEntry move = table.get(t.hashCode());
-                if(move.wins > move.losses)
+                TicTacToe[] moveList = getSuccessors(t);
+                for(int i = 0; i < moveList.length && moveList[i] != null; i++)
                 {
-                    getSuccessors(t);
-                    t.move(move.row, move.column);
-                }
-                else
-                {
-                    t.move(row, column);
+                    if(move.wins > move.losses)
+                    {
+                        if(t.move(move.row, move.column))
+                        {
+                            break;
+                        }
+                    }
                 }
             }
             else
             {
                 if(t.move(row, column))
                 {
-                    table.put(t.hashCode(), new HashEntry(t.hashCode(), 0, 0, row, column));
+                    table.put(t.hashCode(), new HashEntry(1, 0, 0, row, column));
                 }
                 else
                 {
@@ -143,6 +170,19 @@ public class SmartPlayer
     public String toString()
     {
         return table.toString();
+    }
+
+    public void report()
+    {
+        System.out.println("The number of slots is: " + table.numSlots());
+        System.out.println("The number of entries is: " + table.numEntries());
+        System.out.println("The % full is: " + ((table.numEntries()/table.numSlots()) * 100));
+        System.out.println("The number of collisions is: " + table.numCollisions());
+    }
+
+    public void favoriteMove()
+    {
+
     }
 
     private class HashEntry

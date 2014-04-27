@@ -128,6 +128,23 @@ public class TicTacToe
             return false;
     }
 
+    public int emptyCount()
+    {
+        int count = 0;
+        for(char[] a : board)
+        {
+            for(char c : a)
+            {
+                if(c == 0)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
     public int getTurn()
     {
         return turn;

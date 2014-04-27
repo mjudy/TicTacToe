@@ -6,7 +6,7 @@ package proj4;
  */
 public class Hashtable<K, V>
 {
-    static final int DEFAULT_SIZE = 101;
+    static final int DEFAULT_SIZE = 267;
     private int entries;
     private int collisions;
     private Node<K, V>[] table;
@@ -68,7 +68,7 @@ public class Hashtable<K, V>
         {
             table[position].data = data;
         }
-        else
+        else if(table[position] == null)
         {
             table[position] = new Node<K, V> (key, data);
             entries++;
@@ -82,8 +82,9 @@ public class Hashtable<K, V>
 
         if (hash < 0)
         {
-            hash += table.length;
+            hash += table.length - 1;
         }
+        System.out.println(hash);
         return hash;
     }
     
@@ -92,11 +93,16 @@ public class Hashtable<K, V>
         int offset = 1;
         int position = trueHash(key);
 
-        while (table[position] != null && table[position].data.equals(key))
+        while (table[position] != null && table[position].key.equals(key))
         {
             position += offset;
             offset += 2;
             collisions++;
+            if(position < 0)
+            {
+                position -= position;
+                position += offset;
+            }
             if(position >= table.length)
             {
                 position -= table.length;
@@ -106,20 +112,20 @@ public class Hashtable<K, V>
         return position;
     }
 
-    public String toString()
-    {
-        int count = 0;
-        String str = "";
-        for(Node i : table)
-        {
-            if(i.key != null)
-            {
-                str += "[" + count + "] " + i.key.toString() + "\n";
-            }
-            count++;
-        }
-        return str;
-    }
+//    public String toString()
+//    {
+//        int count = 0;
+//        String str = "";
+//        for(Node i : table)
+//        {
+//            if(i.key != null)
+//            {
+//                str += "[" + count + "] " + i.key.toString() + "\n";
+//            }
+//            count++;
+//        }
+//        return str;
+//    }
 
     private class Node<K, V>
     {
