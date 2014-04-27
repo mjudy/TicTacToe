@@ -18,13 +18,13 @@ public class Project4
         RandomAI p1 = new RandomAI('O', 1);
         SmartPlayer p2 = new SmartPlayer('X', 2);
 
-        test.play(p1, p2, 100);
+        test.play(p1, p2, 1000);
     }
 
     public static void play(RandomAI p1, SmartPlayer p2, int numGames)
     {
-        int p1Wins = 0;
-        int p2Wins = 0;
+        float p1Wins = 0;
+        float p2Wins = 0;
         for(int i = 0; i < numGames; i++)
         {
 //            System.out.println("New Game!");
@@ -56,9 +56,10 @@ public class Project4
 
         System.out.println("FINAL REPORT:\n");
         p2.report();
-        float winPerc = (p1Wins/numGames);
+        float winPerc = (p1Wins/numGames) * 100;
         System.out.println("The Random Player has won " + p1Wins + " times which is " + winPerc + " percent.");
-        winPerc = (p2Wins/numGames);
+        winPerc = (p2Wins/numGames) * 100;
         System.out.println("The Smart Player has won " + p2Wins + " times which is " + winPerc + " percent.");
+        p2.favoriteMove();
     }
 }

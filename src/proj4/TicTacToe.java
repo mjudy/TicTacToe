@@ -68,11 +68,27 @@ public class TicTacToe
             {
                 if(board[i][j] != 0)
                 {
-                    hash += board[i][j] + i + j;
+                    if(i == 0 && j == 0)
+                        hash += board[i][j] + 11;
+                    if(i == 1 && j == 0)
+                        hash += board[i][j] + 13;
+                    if(i == 2 && j == 0)
+                        hash += board[i][j] + 17;
+                    if(i == 0 && j == 1)
+                        hash += board[i][j] + 19;
+                    if(i == 1 && j == 1)
+                        hash += board[i][j] + 23;
+                    if(i == 2 && j == 1)
+                        hash += board[i][j] + 29;
+                    if(i == 0 && j == 2)
+                        hash += board[i][j] + 31;
+                    if(i == 1 && j == 2)
+                        hash += board[i][j] + 37;
+                    if(i == 2 && j == 2)
+                        hash += board[i][j] + 41;
                 }
             }
         }
-        hash = (int)((hash*hash) * 1.618);
         return hash;
     }
 

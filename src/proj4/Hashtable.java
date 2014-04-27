@@ -38,9 +38,9 @@ public class Hashtable<K, V>
 
     public V get(K key)
     {
-        if(table[getPositionInHashtable(key)] != null)
+        if(table[getPosition(key)] != null)
         {
-            return table[getPositionInHashtable(key)].data;
+            return table[getPosition(key)].data;
         }
         else
             return null;
@@ -84,10 +84,33 @@ public class Hashtable<K, V>
         {
             hash += table.length - 1;
         }
-        System.out.println(hash);
+//        System.out.println(hash);
         return hash;
     }
-    
+
+    private int getPosition(K key)
+    {
+        int offset = 1;
+        int position = trueHash(key);
+
+        while (table[position] != null && table[position].key.equals(key))
+        {
+            position += offset;
+            offset += 2;
+            if(position < 0)
+            {
+                position -= position;
+                position += offset;
+            }
+            if(position >= table.length)
+            {
+                position -= table.length;
+            }
+        }
+
+        return position;
+    }
+
     private int getPositionInHashtable(K key)
     {
         int offset = 1;

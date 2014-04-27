@@ -137,7 +137,7 @@ public class SmartPlayer
             {
                 if(t.move(row, column))
                 {
-                    table.put(t.hashCode(), new HashEntry(1, 0, 0, row, column));
+                    table.put(t.hashCode(), new HashEntry(1, 0, 0, row, column, t.toString()));
                 }
                 else
                 {
@@ -176,13 +176,26 @@ public class SmartPlayer
     {
         System.out.println("The number of slots is: " + table.numSlots());
         System.out.println("The number of entries is: " + table.numEntries());
-        System.out.println("The % full is: " + ((table.numEntries()/table.numSlots()) * 100));
+        System.out.println("The % full is: " + (((float)table.numEntries()/(float)table.numSlots()) * 100));
         System.out.println("The number of collisions is: " + table.numCollisions());
     }
 
     public void favoriteMove()
     {
+        int mostSeen = 0;
+        int index = 0;
+        for(int i = 0; i < table.numSlots(); i++)
+        {
+            if(table.get(i) != null && table.get(i).timesSeen > mostSeen)
+            {
+                mostSeen = table.get(i).timesSeen;
+                index = i;
+            }
+        }
 
+        System.out.println("My favorite first move is: \n" + table.get(index).boardStr);
+        float winPerc = table.get(index).wins/table.get(index).timesSeen;
+        System.out.println("Won " + table.get(index).wins + " of " + table.get(index).timesSeen + " which is " + winPerc);
     }
 
     private class HashEntry
@@ -192,6 +205,7 @@ public class SmartPlayer
         int losses;
         int row;
         int column;
+        String boardStr;
 
         HashEntry()
         {
@@ -200,15 +214,17 @@ public class SmartPlayer
             losses = 0;
             row = 0;
             column = 0;
+            boardStr = "";
         }
 
-        HashEntry(int timesSeen, int wins, int losses, int row, int column)
+        HashEntry(int timesSeen, int wins, int losses, int row, int column, String boardStr)
         {
             this.timesSeen = timesSeen;
             this.wins = wins;
             this.losses = losses;
             this.row = row;
             this.column = column;
+            this.boardStr = boardStr;
         }
 
         void incrementWins()
