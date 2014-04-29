@@ -20,14 +20,18 @@ public class TicTacToe
         turn = 1;
     }
 
-    public TicTacToe(String boardStr)
+    public TicTacToe(String boardStr, int turn)
     {
         boardStr = boardStr.replaceAll("\n", "");
+        boardStr = boardStr.replaceAll("\\|", "");
+        board = new char[ROWS][COLUMNS];
+        int index = 0;
         for(int i = 0; i < 3; i++)
         {
             for(int j = 0; j < 3; j++)
             {
-                board[i][j] = boardStr.charAt((i+j)%2);
+                if(boardStr.charAt(index) != 0)
+                    board[i][j] = boardStr.charAt(index++);
             }
         }
     }
@@ -61,7 +65,6 @@ public class TicTacToe
     public int hashCode()
     {
         int hash = 0;
-        int count = 1;
         for(int i = 0; i < 3; i++)
         {
             for(int j = 0; j < 3; j++)

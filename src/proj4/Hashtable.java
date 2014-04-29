@@ -1,12 +1,14 @@
 package proj4;
 
+import java.util.Arrays;
+
 /**
  * @author theghv
  * @version 1.0 Date: 4/23/14 Time: 8:54 PM
  */
 public class Hashtable<K, V>
 {
-    static final int DEFAULT_SIZE = 267;
+    static final int DEFAULT_SIZE = 5;
     private int entries;
     private int collisions;
     private Node<K, V>[] table;
@@ -25,15 +27,23 @@ public class Hashtable<K, V>
 
     public boolean containsKey(K key)
     {
-
-        for(int i = 0; i < table.length; i++)
+        if(table[getPosition(key)] != null)
         {
-            if(table[i] == key)
-            {
-                return true;
-            }
+            return true;
         }
-        return false;
+        else
+        {
+            return false;
+        }
+
+//        for(int i = 0; i < table.length; i++)
+//        {
+//            if(table[i] == key)
+//            {
+//                return true;
+//            }
+//        }
+//        return false;
     }
 
     public V get(K key)
@@ -64,6 +74,12 @@ public class Hashtable<K, V>
     public void put(K key, V data)
     {
         int position = getPositionInHashtable(key);
+
+        if(entries > ((float)table.length * 0.8))
+        {
+            resize();
+        }
+
         if(containsKey(key))
         {
             table[position].data = data;
@@ -82,9 +98,8 @@ public class Hashtable<K, V>
 
         if (hash < 0)
         {
-            hash += table.length - 1;
+            hash -= table.length;
         }
-//        System.out.println(hash);
         return hash;
     }
 
@@ -93,18 +108,16 @@ public class Hashtable<K, V>
         int offset = 1;
         int position = trueHash(key);
 
-        while (table[position] != null && table[position].key.equals(key))
+        if(table[position] != null && table[position].key.equals(key))
         {
-            position += offset;
-            offset += 2;
-            if(position < 0)
+            while (table[position] != null && table[position].key.equals(key))
             {
-                position -= position;
                 position += offset;
-            }
-            if(position >= table.length)
-            {
-                position -= table.length;
+                offset += 2;
+                if(position >= table.length)
+                {
+                    position -= table.length;
+                }
             }
         }
 
@@ -116,39 +129,55 @@ public class Hashtable<K, V>
         int offset = 1;
         int position = trueHash(key);
 
-        while (table[position] != null && table[position].key.equals(key))
+        if(table[position] != null && table[position].key.equals(key))
         {
-            position += offset;
-            offset += 2;
-            collisions++;
-            if(position < 0)
+            while (table[position] != null && table[position].key.equals(key))
             {
-                position -= position;
                 position += offset;
-            }
-            if(position >= table.length)
-            {
-                position -= table.length;
+                offset += 2;
+                collisions++;
+                if(position >= table.length)
+                {
+                    position -= table.length;
+                }
             }
         }
 
         return position;
     }
 
-//    public String toString()
-//    {
-//        int count = 0;
-//        String str = "";
-//        for(Node i : table)
-//        {
-//            if(i.key != null)
-//            {
-//                str += "[" + count + "] " + i.key.toString() + "\n";
-//            }
-//            count++;
-//        }
-//        return str;
-//    }
+    private void resize()
+    {
+       table = Arrays.copyOf(table, nextPrime(table.length * 2));
+    }
+
+    private int nextPrime(int n)
+    {
+        if( n % 2 == 0 )
+            n++;
+
+        while(!isPrime(n))
+        {
+            n += 2;
+        }
+
+        return n;
+    }
+
+    private boolean isPrime(int n)
+    {
+        if( n == 2 || n == 3 )
+            return true;
+
+        if( n == 1 || n % 2 == 0 )
+            return false;
+
+        for( int i = 3; i * i <= n; i += 2 )
+            if( n % i == 0 )
+                return false;
+
+        return true;
+    }
 
     private class Node<K, V>
     {

@@ -32,64 +32,54 @@ public class SmartPlayer
         rand = new Random(new Random().nextLong());
         table = new Hashtable<Integer, HashEntry>();
         gameStates = new int[9];
-        stateCount = player - 1;
+        stateCount = 0;
     }
 
     public void endGame(TicTacToe finalBoard)
     {
         HashEntry entry;
-        if(table.containsKey(finalBoard.hashCode()))
+        if(finalBoard.getWinner() == player)
         {
-            if(finalBoard.getWinner() == player)
+            for(int i : gameStates)
             {
-                for(int i : gameStates)
+                if(table.containsKey(i))
                 {
-                    if(table.containsKey(i))
-                    {
-                        entry = table.get(i);
-                        entry.incrementWins();
-                        entry.incrementTimesSeen();
-                        table.put(i, entry);
-                    }
-                    else
-                    {
-                        entry = new HashEntry();
-                        table.put(i, entry);
-                    }
-                }
-            }
-            else
-            {
-                for(int i : gameStates)
-                {
-                    if(table.containsKey(i))
-                    {
-                        entry = table.get(i);
-                        entry.incrementLosses();
-                        entry.incrementTimesSeen();
-                        table.put(i, entry);
-                    }
-                    else
-                    {
-                        entry = new HashEntry();
-                        table.put(i, entry);
-                    }
+//                    System.out.println(i);
+                    entry = table.get(i);
+                    entry.incrementWins();
+                    entry.incrementTimesSeen();
+                    table.put(i, entry);
                 }
             }
         }
+        else
+        {
+            for(int i : gameStates)
+            {
+                if(table.containsKey(i))
+                {
+                    entry = table.get(i);
+                    entry.incrementLosses();
+                    entry.incrementTimesSeen();
+                    table.put(i, entry);
+                }
+            }
+        }
+
     }
 
     public TicTacToe[] getSuccessors(TicTacToe t)
     {
-        TicTacToe guess = new TicTacToe(t.toString());
+        TicTacToe guess = new TicTacToe(t.toString(), player);
         TicTacToe[] boards = new TicTacToe[9];
         int count = 0;
-        while (count < guess.emptyCount())
+        while (count < 9)
         {
             if(successorTest(rand.nextInt(3), rand.nextInt(3), guess))
             {
                 boards[count] = guess;
                 count++;
+                guess = new TicTacToe(t.toString(), player);
             }
             else
                 break;
@@ -99,36 +89,51 @@ public class SmartPlayer
 
     private boolean successorTest(int row, int column, TicTacToe t)
     {
-        if(t.move(row, column))
-        {
-            return true;
-        }
-        else
-        {
-            successorTest(row, column, t);
-        }
-        return false;
+        return t.move(row, column);
     }
 
     public void move(TicTacToe t)
     {
+        gameStates[stateCount++] = t.hashCode();
+        makeMove(t);
+    }
+
+    public void makeMove(TicTacToe t)
+    {
         int row = rand.nextInt(3);
         int column = rand.nextInt(3);
         t.setPlayerMark(marker, player);
+        HashEntry move;
+        TicTacToe[] moveList = getSuccessors(t);
 
         while(t.getTurn() == player)
         {
             if(table.containsKey(t.hashCode()))
             {
-                HashEntry move = table.get(t.hashCode());
-                TicTacToe[] moveList = getSuccessors(t);
-                for(int i = 0; i < moveList.length && moveList[i] != null; i++)
+//                for(int i = 0; i < moveList.length && moveList[i] != null; i++)
                 {
+                    move = table.get(t.hashCode());
                     if(move.wins > move.losses)
                     {
                         if(t.move(move.row, move.column))
                         {
                             break;
+                        }
+                        else
+                        {
+                            while(!t.move(row, column))
+                            {
+                                row = rand.nextInt(3);
+                                column = rand.nextInt(3);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        while(!t.move(row, column))
+                        {
+                            row = rand.nextInt(3);
+                            column = rand.nextInt(3);
                         }
                     }
                 }
@@ -141,17 +146,16 @@ public class SmartPlayer
                 }
                 else
                 {
-                    move(t);
+                    makeMove(t);
                 }
             }
         }
-        stateCount += 2;
     }
 
     public void newGame(int player)
     {
         this.player = player;
-        stateCount = player - 1;
+        stateCount = 0;
         gameStates = new int[9];
     }
 
@@ -194,7 +198,7 @@ public class SmartPlayer
         }
 
         System.out.println("My favorite first move is: \n" + table.get(index).boardStr);
-        float winPerc = table.get(index).wins/table.get(index).timesSeen;
+        float winPerc = (float)table.get(index).wins/table.get(index).timesSeen;
         System.out.println("Won " + table.get(index).wins + " of " + table.get(index).timesSeen + " which is " + winPerc);
     }
 

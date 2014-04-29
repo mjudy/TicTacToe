@@ -23,11 +23,10 @@ public class Project4
 
     public static void play(RandomAI p1, SmartPlayer p2, int numGames)
     {
-        float p1Wins = 0;
-        float p2Wins = 0;
+        int p1Wins = 0;
+        int p2Wins = 0;
         for(int i = 0; i < numGames; i++)
         {
-//            System.out.println("New Game!");
             TicTacToe game = new TicTacToe();
             p2.newGame(2);
 
@@ -40,25 +39,27 @@ public class Project4
 
                 if(game.getWinner() != -1 && j > 3)
                 {
-//                    game.printBoard();
-//                    System.out.println("Player " + game.getWinner() + " Wins!");
-                    p2.endGame(game);
 
                     if(game.getWinner() == 1)
+                    {
                         p1Wins++;
+                    }
                     else if(game.getWinner() == 2)
+                    {
                         p2Wins++;
+                    }
 
                     break;
                 }
             }
+            p2.endGame(game);
         }
 
         System.out.println("FINAL REPORT:\n");
         p2.report();
-        float winPerc = (p1Wins/numGames) * 100;
+        float winPerc = ((float)p1Wins/numGames) * 100;
         System.out.println("The Random Player has won " + p1Wins + " times which is " + winPerc + " percent.");
-        winPerc = (p2Wins/numGames) * 100;
+        winPerc = ((float)p2Wins/numGames) * 100;
         System.out.println("The Smart Player has won " + p2Wins + " times which is " + winPerc + " percent.");
         p2.favoriteMove();
     }
