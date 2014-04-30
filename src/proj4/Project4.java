@@ -1,16 +1,18 @@
 package proj4;
 
 /**
- * @author theghv
+ * Main class for the tic tac toe project.
+ *
+ * @author Mark Judy
  * @version 1.0 Date: 4/23/14 Time: 8:54 PM
  */
 public class Project4
 {
-    public Project4()
-    {
-
-    }
-
+    /**
+     * Main method to run the program.
+     *
+     * @param args argument list
+     */
     public static void main(String[] args)
     {
         Project4 test = new Project4();
@@ -21,6 +23,13 @@ public class Project4
         test.play(p1, p2, 1000);
     }
 
+    /**
+     * Plays the tic tac toe game with the given players a given number of times.
+     *
+     * @param p1 the starting player in the tic tac toe game
+     * @param p2 the second player in the tic tac toe game
+     * @param numGames the number of games to be played
+     */
     public static void play(RandomAI p1, SmartPlayer p2, int numGames)
     {
         int p1Wins = 0;
@@ -37,14 +46,14 @@ public class Project4
                 else if (game.getTurn() == 2)
                     p2.move(game);
 
-                if(game.getWinner() != -1 && j > 3)
+                if(game.isOver() != -1 && j > 3)
                 {
 
-                    if(game.getWinner() == 1)
+                    if(game.isOver() == 1)
                     {
                         p1Wins++;
                     }
-                    else if(game.getWinner() == 2)
+                    else if(game.isOver() == 2)
                     {
                         p2Wins++;
                     }
